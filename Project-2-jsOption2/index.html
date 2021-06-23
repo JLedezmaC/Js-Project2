@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Project 2</title>
+    <link rel="stylesheet" href="public/css/styles.css">
+    <meta name="author" content="Ignacio CL, Kendoll Castro" />
+    <meta name="copyright" content="Copyright © 2022" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="background">
+        <div class="taskToAdd">
+          <div class="topContent">
+            <h1>To-do List</h1>
+            <img src="img/todolist/user-icon.png" alt="User">
+          </div>
+          <div class="categories">
+            <div class="wrapper-categories">
+              <div class="title">
+                <h3>Choose Category</h3>
+              </div>
+              <div class="taskOptions">
+                <label class="container">
+                  <input type="radio" checked="checked" name="radio" value="food">
+                  <span class="checkmark">
+                    <div class="food">
+                      <img src="img/todolist/food-icon.png" alt="Pizza-Logo">
+                      <p>Food</p>
+                    </div>
+                  </span>
+                </label>
+                <label class="container">
+                  <input type="radio" name="radio" value="clothing">
+                  <span class="checkmark">
+                    <div class="clothing">
+                      <img src="img/todolist/clothe-icon.png" alt="clothing-Logo">
+                      <p>Clothing</p>
+                    </div>
+                  </span>
+                </label>
+                <label class="container">
+                  <input type="radio" name="radio" value="shopping">
+                  <span class="checkmark">
+                    <div class="shopping">
+                      <img src="img/todolist/shop-icon.png" alt="shopping-Logo">
+                      <p>Shopping</p>
+                    </div>
+                  </span>
+                </label>
+                <label class="container">
+                  <input type="radio" name="radio" value="homework">
+                  <span class="checkmark">
+                    <div class="homework">
+                      <img src="img/todolist/homework-icon.png" alt="homework-Logo">
+                      <p>Homework</p>
+                    </div>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="addTask">
+            <form action="">
+              <input type="text" id="task" placeholder="Task" >
+              <div class="button">
+                <button type="submit">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="taskAdded">
+        <div class="TaskList">
+          <h2>Current Tasks</h2>
+          <div class="list">
+            <ul id="taskul">
+            </ul>      
+          </div>
+          <p class="copy-right">Copyright © Kendoll and Ignacio</p>
+        </div>
+      </div>
+    </div>
+    <script src="js/script.js"></script>
+  </body>
+</html
