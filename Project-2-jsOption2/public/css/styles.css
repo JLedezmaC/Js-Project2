@@ -1,7 +1,8 @@
-body {
+html {
   background-repeat: no-repeat;
-  background-image: linear-gradient(to bottom, #171D5B, #323986, #905ED1);
-  height: 100vh;
+  /* background-image: linear-gradient(to bottom,#171D5B, #323986, #905ED1);*/
+  background-color: #1e174e;
+  background-size: cover;
   color: #e3f1ed;
   font-family: 'Handlee', cursive;
   scroll-behavior: smooth;

@@ -1,84 +1,72 @@
 const form = document.querySelector('form');
 const input = document.querySelector('#task');
 const categories = document.querySelectorAll('label input');
-const editInput= document.querySelector('#taskul input[type=text]');
-const label=document.querySelector('#taskul label');
-const addedTasks = document.querySelectorAll('#taskul li')
-const listofTaks = document.querySelector('#taskul')
-const actualTime = document.querySelector('#time')
+const listofTaks = document.querySelector('#taskul');
+const array = [];
 
-function categorieSelect(categories) {
-  for (let i = 0; i < categories.length; i++) {
-    if (categories[i].checked === true) {
-      const valueCategorie = categories[i].value;
-      return valueCategorie;
+class Task {
+  constructor(inputValue, filter) {
+    this.inputValue = inputValue;
+    this.filter = filter;
+  }
+
+  createTask() {
+    const newTask = `
+    <li>
+      <input type='checkbox'>
+      <div class='nameTask'>
+        <label id='TaskName'>${this.inputValue}</label>
+        <input type='text'>
+        <p>${this.filter}</p>
+      </div>
+      <button class="edit"><img src="./img/todolist/edit-icon.png" alt="Edit-Button"></button>
+      <button class="delete"><img src="./img/todolist/delete-icon.png" alt="Delete-Button"></button>
+    </li>    
+  `;
+    array.push(newTask);
+    listofTaks.innerHTML += newTask;
+  }
+}
+
+function categorieSelect(typeOfTask) {
+  let valueCategorie;
+  for (let i = 0; i < typeOfTask.length; i++) {
+    if (typeOfTask[i].checked === true) {
+      valueCategorie = typeOfTask[i].value;
     }
   }
+  return valueCategorie;
 }
 
-iniciar();
-
-function iniciar(){
-  window.setInterval(currentTime,1000);
-}
-
-function currentTime(){
-  let ss;
-  let minutes;
-  let hours;
-  ss++
-  if(ss > 59){
-    minutes++
-    ss = 0;
-    return actualTime.innerHTML = `${minutes} minutes`
+function editTask(e) {
+  const editInput = e.querySelector('input[type=text]');// Se puede hacer un selector como queryselector desde un elemento especifico, Descubrimiento nuevo: se puede llamar a un elemento especifico usando el li en este caso en vez de document asi se es mas especifico 
+  const label = e.querySelector('label');
+  const TaskCreated = e.classList.contains('editMode');
+  if (TaskCreated) {
+    label.innerText = editInput.value;
+  } else {
+    editInput.value = label.innerText;
   }
-  
-  if(minutes > 59){
-    hours++;
-    mm = 0;
-    hours;
-    return actualTime.innerHTML = `${hours} hours`
-  }
+  e.classList.toggle('editMode');
 }
 
-form.addEventListener('submit', function formInfo (e) {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-  let inputValue = input.value;
+  const inputValue = input.value;
   form.elements[0].value = '';
-  let filter = categorieSelect(categories);
-  let time = iniciar();
-  let addTask = new Task(inputValue, filter,time);
+  const filter = categorieSelect(categories);
+  const addTask = new Task(inputValue, filter);
   addTask.createTask();
 });
 
-class Task {
-  constructor(inputValue, filter,time) {
-    this.inputValue = inputValue;
-    this.filter = filter;
-    this.time = time;
+listofTaks.addEventListener('click', (e) => {
+  const especificTask = e.target.parentElement.parentElement;
+  if (e.target.tagName === 'IMG') {
+    if (e.target.parentElement.classList.contains('edit')) {
+      editTask(especificTask);
+    } else {
+      especificTask.remove();
+      alert('La tarea seleccionada va a ser eliminada');
+    }
   }
-
-  createTask(){
-    let newTask = `
-    <li>
-      <input type="checkbox">
-      <div class="nameTask">
-        <label id="TaskName">${this.inputValue}</label>
-        <input type="text">
-        <p>${this.filter} <span id='time'>${this.time}</span></p>
-      </div>
-      <button onclick = 'editTask' class="edit"><img src="./img/todolist/edit-icon.png" alt="Edit-Button"></button>
-      <button onclick = 'deleteTask' class="delete"><img src="./img/todolist/delete-icon.png" alt="Delete-Button"></button>
-    </li>    
-  `
-  listofTaks.innerHTML += newTask;
-  }
-}
-
-
-function editTask(e){
-  let currentTask = e.target.parentElement;
-  currentTask.remove()
-}
-
-
+});
