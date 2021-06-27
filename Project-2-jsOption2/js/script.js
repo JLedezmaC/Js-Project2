@@ -2,7 +2,8 @@ const form = document.querySelector('form');
 const input = document.querySelector('#task');
 const categories = document.querySelectorAll('label input');
 const listofTaks = document.querySelector('#taskul');
-const array = [];
+const deleteAllTasks = document.querySelector('.deleteAll h4');
+let array = []
 
 class Task {
   constructor(inputValue, filter) {
@@ -25,6 +26,18 @@ class Task {
   `;
     array.push(newTask);
     listofTaks.innerHTML += newTask;
+    localStorage.setItem('Tasks', JSON.stringify(array));
+  }
+}
+
+class LocalTask {
+  constructor(array) {
+    this.array = array;
+  }
+
+  createTaskLocal() {
+    const newTask = `${array}`
+    listofTaks.innerHTML += newTask;
   }
 }
 
@@ -37,6 +50,17 @@ function categorieSelect(typeOfTask) {
   }
   return valueCategorie;
 }
+
+function getFromLocalStorage() {
+  const SavedTasks = JSON.parse(localStorage.getItem('Tasks')); // Parse en JSON hace un array a un objeto 
+  if (SavedTasks) {
+    array = SavedTasks;
+    let TaskLocal = new LocalTask(array);
+    TaskLocal.createTaskLocal()
+  }
+}
+
+getFromLocalStorage();
 
 function editTask(e) {
   const editInput = e.querySelector('input[type=text]');// Se puede hacer un selector como queryselector desde un elemento especifico, Descubrimiento nuevo: se puede llamar a un elemento especifico usando el li en este caso en vez de document asi se es mas especifico 
@@ -66,7 +90,18 @@ listofTaks.addEventListener('click', (e) => {
       editTask(especificTask);
     } else {
       especificTask.remove();
-      alert('La tarea seleccionada va a ser eliminada');
+      alert('The selected task is going to be deleted');
     }
   }
 });
+
+deleteAllTasks.addEventListener('click', () => {
+  const allTasks = document.querySelectorAll('#taskul input[type=checkbox]');
+  for (let i = 0; i < allTasks.length; i++) {
+    if (allTasks[i].checked === true) {
+      const fatherOfTask = allTasks[i].parentElement;
+      fatherOfTask.remove();
+    }
+  }
+});
+

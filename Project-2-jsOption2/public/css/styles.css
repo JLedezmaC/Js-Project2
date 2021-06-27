@@ -189,3 +189,17 @@ label div {
     height: 40px; }
   .edit:hover, .delete:hover {
     border-bottom: 1px solid white; }
+
+input[type=checkbox]:checked + .nameTask label {
+  text-decoration: line-through;
+  color: gray; }
+
+.deleteAll {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .deleteAll h4 {
+    color: #7B7B7B;
+    cursor: pointer; }
+    .deleteAll h4:hover {
+      color: #da6969; }

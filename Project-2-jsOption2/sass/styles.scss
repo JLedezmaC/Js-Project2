@@ -237,3 +237,23 @@ label{
     border-bottom: 1px solid white;
   }
 }
+
+input[type=checkbox]:checked + .nameTask{
+  label{
+    text-decoration: line-through;
+    color: gray;
+  }
+}
+
+.deleteAll{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  h4{
+    color: #7B7B7B;
+    cursor: pointer;
+    &:hover{
+      color: rgb(218, 105, 105);
+    }
+  }
+}
