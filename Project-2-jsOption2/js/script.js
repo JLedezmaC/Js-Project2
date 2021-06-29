@@ -1,45 +1,95 @@
 const form = document.querySelector('form');
 const input = document.querySelector('#task');
 const categories = document.querySelectorAll('label input');
-const listofTaks = document.querySelector('#taskul');
-const deleteAllTasks = document.querySelector('.deleteAll h4');
-let array = []
+const listofTasks = document.querySelector('#taskul');
+const deleteAll = document.querySelector('.deleteAll h4');
+let array = [];
+let id = 0;
+const SavedTasks = JSON.parse(localStorage.getItem('Tasks')); // Parse en JSON hace un array a un objeto 
 
 class Task {
-  constructor(inputValue, filter) {
+  constructor(inputValue, filter,id) {
     this.inputValue = inputValue;
     this.filter = filter;
+    this.id = id;
   }
-
-  createTask() {
-    const newTask = `
-    <li>
-      <input type='checkbox'>
-      <div class='nameTask'>
-        <label id='TaskName'>${this.inputValue}</label>
-        <input type='text'>
-        <p>${this.filter}</p>
-      </div>
-      <button class="edit"><img src="./img/todolist/edit-icon.png" alt="Edit-Button"></button>
-      <button class="delete"><img src="./img/todolist/delete-icon.png" alt="Delete-Button"></button>
-    </li>    
-  `;
-    array.push(newTask);
-    listofTaks.innerHTML += newTask;
-    localStorage.setItem('Tasks', JSON.stringify(array));
+  createTask(){
+    const li = document.createElement('li');
+    li.setAttribute('id',this.id);
+    const input = document.createElement('input');
+    input.setAttribute('type','checkbox');
+    const div = document.createElement('div');
+    div.className ='nameTask';
+    const label = document.createElement('label');
+    label.setAttribute('id','TaskName');
+    label.innerHTML = `${this.inputValue}`;
+    const inputText = document.createElement('input');
+    inputText.setAttribute('type','text');
+    const categoria = document.createElement('p');
+    categoria.innerHTML =`${this.filter}`;
+    const buttonEdit = document.createElement('button');
+    buttonEdit.className = 'edit';
+    const imageEdit = document.createElement('img');
+    imageEdit.setAttribute('src',"./img/todolist/edit-icon.png")
+    buttonEdit.appendChild(imageEdit)
+    const buttonDelete = document.createElement('button');
+    buttonDelete.className ='delete';
+    const imageDelete = document.createElement('img');
+    imageDelete.setAttribute('src',"./img/todolist/delete-icon.png")
+    buttonDelete.appendChild(imageDelete)
+    listofTasks.appendChild(li);
+    li.appendChild(input);
+    li.appendChild(div);
+    div.appendChild(label);
+    div.appendChild(inputText);
+    div.appendChild(categoria);
+    li.appendChild(buttonEdit)
+    li.appendChild(buttonDelete);
+    this.editTask(buttonEdit,li);
+    this.deleteTask(buttonDelete,li);
+    this.deleteAllTasks();
+  }
+  editTask(buttonEdit,li){
+    buttonEdit.addEventListener('click', (e) => {
+      const especificTask = li;
+      if (e.target.tagName === 'IMG') {
+        if (e.target.parentElement.classList.contains('edit')) {
+          ChangeNameTask(especificTask);
+        }
+      }
+    });
+  }
+  deleteTask(buttonDelete,li){
+    buttonDelete.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') {
+        if (e.target.parentElement.classList.contains('delete')) {
+          li.remove();
+        }
+      }
+    });
+  }
+  deleteAllTasks(){
+    deleteAll.addEventListener('click', () => {
+      const allTasks = document.querySelectorAll('#taskul input[type=checkbox]');
+      for (let i = 0; i < allTasks.length; i++) {
+        if (allTasks[i].checked === true) {
+          const fatherOfTask = allTasks[i].parentElement;
+          fatherOfTask.remove();
+        }
+      }
+    });
   }
 }
 
-class LocalTask {
-  constructor(array) {
-    this.array = array;
-  }
 
-  createTaskLocal() {
-    const newTask = `${array}`
-    listofTaks.innerHTML += newTask;
+function getFromLocalStorage(){
+  for(let i = 0; i< SavedTasks.length; i++){
+    const LocalTask = new Task(SavedTasks[i].input,SavedTasks[i].categorie,SavedTasks[i].UniqueId)
+    LocalTask.createTask();
   }
 }
+
+getFromLocalStorage()
 
 function categorieSelect(typeOfTask) {
   let valueCategorie;
@@ -51,18 +101,8 @@ function categorieSelect(typeOfTask) {
   return valueCategorie;
 }
 
-function getFromLocalStorage() {
-  const SavedTasks = JSON.parse(localStorage.getItem('Tasks')); // Parse en JSON hace un array a un objeto 
-  if (SavedTasks) {
-    array = SavedTasks;
-    let TaskLocal = new LocalTask(array);
-    TaskLocal.createTaskLocal()
-  }
-}
 
-getFromLocalStorage();
-
-function editTask(e) {
+function ChangeNameTask(e) {
   const editInput = e.querySelector('input[type=text]');// Se puede hacer un selector como queryselector desde un elemento especifico, Descubrimiento nuevo: se puede llamar a un elemento especifico usando el li en este caso en vez de document asi se es mas especifico 
   const label = e.querySelector('label');
   const TaskCreated = e.classList.contains('editMode');
@@ -76,32 +116,18 @@ function editTask(e) {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  id += 1;
   const inputValue = input.value;
-  form.elements[0].value = '';
   const filter = categorieSelect(categories);
-  const addTask = new Task(inputValue, filter);
+  const currentTask = {
+    UniqueId: id,
+    input:inputValue,
+    categorie: filter
+  }
+  array.push(currentTask);
+  const addTask = new Task(currentTask.input,currentTask.categorie,currentTask.UniqueId);
   addTask.createTask();
-});
-
-listofTaks.addEventListener('click', (e) => {
-  const especificTask = e.target.parentElement.parentElement;
-  if (e.target.tagName === 'IMG') {
-    if (e.target.parentElement.classList.contains('edit')) {
-      editTask(especificTask);
-    } else {
-      especificTask.remove();
-      alert('The selected task is going to be deleted');
-    }
-  }
-});
-
-deleteAllTasks.addEventListener('click', () => {
-  const allTasks = document.querySelectorAll('#taskul input[type=checkbox]');
-  for (let i = 0; i < allTasks.length; i++) {
-    if (allTasks[i].checked === true) {
-      const fatherOfTask = allTasks[i].parentElement;
-      fatherOfTask.remove();
-    }
-  }
+  localStorage.setItem('Tasks',JSON.stringify(array));
+  form.elements[0].value = '';
 });
 
