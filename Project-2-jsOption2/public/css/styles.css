@@ -190,15 +190,6 @@ label div {
   .edit:hover, .delete:hover {
     border-bottom: 1px solid white; }
 
-/*
-  .delete{
-  background-image: url(../../img/todolist/delete-icon.png);
-  width: 51px;
-  background-repeat: no-repeat;
-  height: 60px;
-  background-size: 42px 41px;
-}
-*/
 input[type=checkbox]:checked + .nameTask label {
   text-decoration: line-through;
   color: gray; }
