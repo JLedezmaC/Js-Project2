@@ -1,4 +1,5 @@
 import {deleteAllTasks, editTask, deleteTask} from './util.js';
+import {array} from './script.js'
 class Task {
 constructor(inputValue, filter, Currentid,status) {
     this.inputValue = inputValue;
@@ -45,7 +46,19 @@ createTask() {
     deleteTask(imageDelete, li);
     deleteAllTasks();
     }
+    addNewTask(){
+        const currentTask = {
+            UniqueId: this.id,
+            input: this.inputValue,
+            categorie: this.filter,
+            status: this.status,
+        };
+        array.push(currentTask);
+        localStorage.setItem('Tasks', JSON.stringify(array));
+    }
 }
 
 
+
 export default Task
+

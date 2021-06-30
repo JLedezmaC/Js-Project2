@@ -4,12 +4,9 @@ const form = document.querySelector('form');
 const input = document.querySelector('#task');
 const categories = document.querySelectorAll('label input');
 const array = [];
-let id = 0;
-
-
-function contador(num){
-  let contador = num + tareas.length;
-  return contador;
+let num = 0;
+function contadorId(num){
+  return num + array.length;
 }
 
 function categorieSelect(typeOfTask) {
@@ -26,18 +23,15 @@ getFromLocalStorage();
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  id += 1;
+  let contador = contadorId(num);
   const inputValue = input.value;
   const filter = categorieSelect(categories);
-  const currentTask = {
-    UniqueId: id,
-    input: inputValue,
-    categorie: filter,
-    status: false
-  };
-  array.push(currentTask);
-  const addTask = new Task(currentTask.input, currentTask.categorie, currentTask.UniqueId, currentTask.status);
+  const addTask = new Task(inputValue, filter, contador, false);
   addTask.createTask();
-  localStorage.setItem('Tasks', JSON.stringify(array));
+  addTask.addNewTask();
   form.elements[0].value = '';
 });
+
+export{
+  array
+}
